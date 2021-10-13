@@ -432,3 +432,57 @@ SELECT [SalesOrderID]
   WHERE a.productID NOT IN (980,365,771,404)
 
   --//-----  End of the Session --------------------------------------------
+  
+  
+  
+  
+ -- 2021-10-11
+ -- SESSION  :  4  - SUBQUERIES 
+
+
+-- SubQueries used in two places
+-- 1. Column level
+-- 2. for Where Clause
+
+
+-- Column Level SubQuery
+
+SELECT *
+, (SELECT B.CIF FROM [KuwaitSales_DEV].[dbo].[KWItemMaster] AS B WHERE B.ItemCode = A.ItemCode AND YEAR = 2021 AND month = 9 ) CIFCal
+FROM [MasterData_DEV].[dbo].tblCountrySales AS A
+WHERE country = 'KW'
+
+
+SELECT *
+, (SELECT B.CIF FROM [KuwaitSales_DEV].[dbo].[KWItemMaster] AS B WHERE B.ItemCode = A.ItemCode AND YEAR = 2021 AND month = 9 ) CIFCal
+,(SELECT Exrate FROM [MasterData_DEV].[dbo].[tblBdgExRate] WHERE Country ='KW') ExRate
+FROM [MasterData_DEV].[dbo].tblCountrySales AS A
+WHERE country = 'KW'
+
+SELECT *
+, (SELECT B.CIF FROM [KuwaitSales_DEV].[dbo].[KWItemMaster] AS B WHERE B.ItemCode = A.ItemCode AND YEAR = 2021 AND month = 9 ) CIFCal
+,(SELECT Exrate FROM [MasterData_DEV].[dbo].[tblBdgExRate] WHERE Country ='KW') ExRate
+, (SELECT B.CIF FROM [KuwaitSales_DEV].[dbo].[KWItemMaster] AS B WHERE B.ItemCode = A.ItemCode AND YEAR = 2021 AND month = 9 ) * (SELECT Exrate FROM [MasterData_DEV].[dbo].[tblBdgExRate] WHERE Country ='KW') CIFAED
+FROM [MasterData_DEV].[dbo].tblCountrySales AS A
+WHERE country = 'KW'
+
+
+
+-- WHERE Clause
+
+-- This Query is executing by Specifying year and month by user.
+
+SELECT * FROM [MasterData_DEV].[dbo].tblCountrySales
+WHERE country = 'AE' AND YEAR(Doc_Dt) = 2021 AND MONTH(Doc_Dt) > 8
+
+
+-- Same as used based on the table which has the values to satisfy the conditions by using SubQuery. (Dynamic Values to the Query)
+
+SELECT * FROM [MasterData_DEV].[dbo].tblCountrySales
+--WHERE country = 'AE' AND YEAR(Doc_Dt) = 2021 AND MONTH(Doc_Dt) > 8
+WHERE YEAR(Doc_dt) = (SELECT SealedYear FROM  [MasterData_DEV].dbo.[Countrylist] WHERE Country = 'AE') AND MONTH(Doc_Dt) = (SELECT SealedMonth+2 FROM [MasterData_DEV].dbo.[CountryList] WHERE country ='AE')
+
+
+-- End of Session : 4 ------------------------------
+
+
