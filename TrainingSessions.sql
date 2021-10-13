@@ -11,7 +11,7 @@ CREATE TABLE Employee (
    age NUMERIC(3)
 )
 
-
+-- Alter Table Stucture 
  ALTER TABLE dbo.Employee
  ALTER COLUMN age FLOAT
 
@@ -24,7 +24,7 @@ CREATE TABLE Employee (
  ALTER TABLE dbo.Employee
  DROP COLUMN Designation
 
-
+-- Drop the table (Delete the table from the Database)
  DROP TABLE dummy
 
 
